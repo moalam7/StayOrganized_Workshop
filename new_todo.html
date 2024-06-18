@@ -147,13 +147,19 @@
           },
           body: JSON.stringify(newTodo),
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
           .then((data) => {
             alert("New task added successfully!");
-            window.location.href = "index.html"; // Redirect to the tasks viewer page
+            window.location.href = "todos.html"; // Redirect to the tasks viewer page
           })
           .catch((error) => {
             console.error("Error adding new task:", error);
+            alert("Error adding new task. Please try again.");
           });
       }
     </script>

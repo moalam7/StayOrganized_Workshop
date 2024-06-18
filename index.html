@@ -3,7 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>todo</title>
+    <title>ToDo Navigation</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.4.0/css/pico.min.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      .container {
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <h1>ToDo Application</h1>
+      <nav>
+        <a href="todos.html" role="button" class="outline">View Tasks</a>
+        <a href="new_todo.html" role="button" class="outline">Add New Task</a>
+      </nav>
+    </div>
+  </body>
 </html>
