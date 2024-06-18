@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users Table Display</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin: 10px 0;
+        color: #333;
+      }
+      .button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+        text-decoration: none; /* Remove underline */
+      }
+      .button:hover {
+        background-color: #45a049;
+      }
+      label {
+        font-size: 16px;
+        margin-right: 10px;
+      }
+      select {
+        padding: 8px;
+        font-size: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .edit-button,
+      .delete-button {
+        padding: 8px 16px;
+        font-size: 14px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+        text-decoration: none; /* Remove underline */
+      }
+      .edit-button:hover,
+      .delete-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <article>
+        <header>
+          <h1>User Tasks</h1>
+          <a href="add.html" class="button">Add Task</a>
+        </header>
+
+        <!-- User dropdown -->
+        <label for="userSelect">Select User:</label>
+        <select id="userSelect" onchange="fetchAndDisplayUserTasks()">
+          <option value="">Select a user</option>
+          <!-- Options will be populated dynamically -->
+        </select>
+
+        <table id="user-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Category</th>
+              <th>Deadline</th>
+              <th>Priority</th>
+              <th>Completed</th>
+              <th colspan="2">Actions</th>
+              <!-- Colspan 2 for Edit and Delete headings -->
+            </tr>
+          </thead>
+          <tbody id="task-data">
+            <!-- Task data will be displayed here -->
+          </tbody>
+        </table>
+      </article>
+    </main>
+    <script>
+      async function fetchAndDisplayUserTasks() {
+        try {
+          const userId = document.getElementById("userSelect").value;
+          if (!userId) return;
+
+          // Fetch user's tasks
+          let response = await fetch(`http://localhost:8083/api/todos/byuser/${userId}`);
+          let tasks = await response.json();
+
+          // Clear existing table data
+          let tableBody = document.getElementById("task-data");
+          tableBody.innerHTML = "";
+
+          // Populate table with tasks
+          tasks.forEach((task) => {
+            let row = tableBody.insertRow();
+
+            let descriptionCell = row.insertCell();
+            descriptionCell.textContent = task.description;
+
+            let categoryCell = row.insertCell();
+            categoryCell.textContent = task.category;
+
+            let deadlineCell = row.insertCell();
+            deadlineCell.textContent = task.deadline;
+
+            let priorityCell = row.insertCell();
+            priorityCell.textContent = task.priority;
+
+            let completedCell = row.insertCell();
+            completedCell.textContent = task.completed ? "Yes" : "No";
+
+            let editCell = row.insertCell();
+            let editAnchor = document.createElement("a");
+            editAnchor.href = `edit.html?id=${task.id}`;
+            editAnchor.textContent = "Edit";
+            editAnchor.classList.add("edit-button");
+            editCell.appendChild(editAnchor);
+
+            let deleteCell = row.insertCell();
+            let deleteAnchor = document.createElement("a");
+            deleteAnchor.href = `delete.html?id=${task.id}`;
+            deleteAnchor.textContent = "Delete";
+            deleteAnchor.classList.add("delete-button");
+            deleteCell.appendChild(deleteAnchor);
+          });
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      async function fetchUsersAndPopulateDropdown() {
+        try {
+          let response = await fetch("http://localhost:8083/api/users");
+          let users = await response.json();
+
+          let userSelect = document.getElementById("userSelect");
+
+          // Populate dropdown with users
+          users.forEach((user) => {
+            let option = document.createElement("option");
+            option.value = user.id;
+            option.textContent = user.name;
+            userSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      }
+
+      // Initial setup
+      fetchUsersAndPopulateDropdown();
+    </script>
+  </body>
+</html>

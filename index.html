@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ToDo Navigation</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.4.0/css/pico.min.css" />
+    <title>Stay Organized</title>
+    <link rel="stylesheet" href="styles.css" />
     <style>
       body {
         margin: 0;
@@ -12,29 +12,73 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh; /* Ensure full viewport height */
         background-color: #f0f0f0;
       }
       .container {
         text-align: center;
+        padding: 20px;
       }
       h1 {
+        margin-bottom: 20px;
+      }
+      p {
         margin-bottom: 20px;
       }
       nav {
         display: flex;
         justify-content: center;
         gap: 20px;
+        margin-top: 20px;
+      }
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      nav ul li {
+        display: inline;
+        margin-right: 10px;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+      nav ul li a:hover {
+        background-color: #ddd;
+      }
+      .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.4;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>ToDo Application</h1>
+      <h1>Welcome to Stay Organized</h1>
+      <p>
+        Managing your tasks effectively is crucial for staying productive and organized. Prioritizing tasks ensures that
+        important activities are completed on time, helping you achieve your goals efficiently.
+      </p>
       <nav>
-        <a href="todos.html" role="button" class="outline">View Tasks</a>
-        <a href="new_todo.html" role="button" class="outline">Add New Task</a>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="todos.html">To dos</a></li>
+        </ul>
       </nav>
     </div>
+    <img
+      src="https://www.creativejuiz.fr/blog/wp-content/uploads/2019/12/user-task-activities-prioritized@2x-1.jpg"
+      alt="User Tasks"
+      class="background-image"
+    />
   </body>
 </html>

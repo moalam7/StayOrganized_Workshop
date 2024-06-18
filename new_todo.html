@@ -118,7 +118,7 @@
           data.forEach((item) => {
             const option = document.createElement("option");
             option.text = item.name; // Assuming each item has a 'name' property
-            option.value = item.id;
+            option.value = item.name; // Set option value as category name
             dropdown.add(option);
           });
         });
@@ -126,14 +126,14 @@
 
       function addNewTodo() {
         const userId = document.getElementById("userDropdown").value;
-        const categoryId = document.getElementById("categoryDropdown").value;
+        const categoryName = document.getElementById("categoryDropdown").value; // Get category name instead of ID
         const priority = document.getElementById("priorityDropdown").value;
         const description = document.getElementById("taskDescription").value;
         const deadline = document.getElementById("deadline").value;
 
         const newTodo = {
           userId: userId,
-          categoryId: categoryId,
+          category: categoryName, // Assign category name
           priority: priority,
           description: description,
           deadline: deadline,
