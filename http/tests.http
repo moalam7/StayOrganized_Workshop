@@ -1,6 +1,6 @@
 GET http://localhost:8083/api/todos/1
-
 GET http://localhost:8083/api/todos/byuser/1
+
 
 GET http://localhost:8083/api/users
 
