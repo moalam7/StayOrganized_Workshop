@@ -3,7 +3,159 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Add New ToDo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+      header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin: 10px 0;
+        color: #333;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        font-size: 16px;
+        margin: 10px 0 5px;
+      }
+      input,
+      select {
+        padding: 8px;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      button {
+        padding: 10px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+        align-self: center;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Add New ToDo</h1>
+      </header>
+      <form id="newTodoForm" onsubmit="addNewTodo(); return false;">
+        <label for="userDropdown">Select User:</label>
+        <select id="userDropdown" required>
+          <option value="">Select a user</option>
+        </select>
+
+        <label for="categoryDropdown">Select Category:</label>
+        <select id="categoryDropdown" required>
+          <option value="">Select a category</option>
+        </select>
+
+        <label for="priorityDropdown">Select Priority:</label>
+        <select id="priorityDropdown" required>
+          <option value="">Select a priority</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <label for="taskDescription">Task Description:</label>
+        <input type="text" id="taskDescription" required />
+
+        <label for="deadline">Deadline (MM/DD/YYYY):</label>
+        <input type="text" id="deadline" required />
+
+        <button type="submit">Add Task</button>
+      </form>
+    </div>
+
+    <script>
+      "use strict";
+
+      const apiUrl = "http://localhost:8083/api/todos";
+      const usersUrl = "http://localhost:8083/api/users";
+      const categoriesUrl = "http://localhost:8083/api/categories";
+
+      window.onload = function () {
+        populateDropdown(usersUrl, "userDropdown");
+        populateDropdown(categoriesUrl, "categoryDropdown");
+      };
+
+      function fetchData(url) {
+        return fetch(url)
+          .then((response) => response.json())
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            return [];
+          });
+      }
+
+      function populateDropdown(url, dropdownId) {
+        fetchData(url).then((data) => {
+          const dropdown = document.getElementById(dropdownId);
+
+          data.forEach((item) => {
+            const option = document.createElement("option");
+            option.text = item.name; // Assuming each item has a 'name' property
+            option.value = item.id;
+            dropdown.add(option);
+          });
+        });
+      }
+
+      function addNewTodo() {
+        const userId = document.getElementById("userDropdown").value;
+        const categoryId = document.getElementById("categoryDropdown").value;
+        const priority = document.getElementById("priorityDropdown").value;
+        const description = document.getElementById("taskDescription").value;
+        const deadline = document.getElementById("deadline").value;
+
+        const newTodo = {
+          userId: userId,
+          categoryId: categoryId,
+          priority: priority,
+          description: description,
+          deadline: deadline,
+          completed: false,
+        };
+
+        fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTodo),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("New task added successfully!");
+            window.location.href = "index.html"; // Redirect to the tasks viewer page
+          })
+          .catch((error) => {
+            console.error("Error adding new task:", error);
+          });
+      }
+    </script>
+  </body>
 </html>
